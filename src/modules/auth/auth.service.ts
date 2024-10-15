@@ -9,6 +9,8 @@ import { Request, Response } from "express";
 import { AuthResponse } from "./types/response";
 import { TokenService } from "./tokens.service";
 import { PublicMessage } from "./enums/message.enum";
+import { CookieKeys } from "src/common/enums/cookie.enum";
+import { CookieOptions } from "src/common/utils/cookie.util";
 
 @Injectable()
 export class AuthService {
@@ -120,9 +122,9 @@ export class AuthService {
   async sendResponse(res: Response, result: AuthResponse) {
     // Send token and code??? to the client
 
-    // TODO: in production we dont need code to be sent
+    // TODO: in production we dont need code and token to be sent
     const { token, code } = result;
-    // res.cookie(CookieKeys.OTP, token, CookieOptions());
+    res.cookie(CookieKeys.OTP, token, CookieOptions());
     res.json({
       message: PublicMessage.SendOtp,
       token,
