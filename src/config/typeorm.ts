@@ -13,7 +13,7 @@ let dataSource = new DataSource({
   database: DB_NAME,
   username: DB_USERNAME,
   password: DB_PASSWORD,
-  synchronize: false,
+  synchronize: true,
 
   entities: ["dist/**/**/**/*.entity{.ts,.js}", "dist/**/**/*.entity{.ts,.js}"],
   // migrations: ["dist/migrations/*{.ts,.js}"],
