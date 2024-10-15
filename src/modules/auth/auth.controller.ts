@@ -1,34 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { Controller, Post, Body, Res } from "@nestjs/common";
+import { AuthService } from "./auth.service";
+import { ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { SwaggerConsumes } from "src/common/swagger-consume.enum";
+import { AuthDto, CheckOtpDto } from "./dto/auth.dto";
+import { Response, Request } from "express";
 
-@Controller('auth')
+@Controller("auth")
+@ApiTags("Auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  // user Login endpoint
+  @Post("user-login")
+  @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
+  userExistence(@Body() authDto: AuthDto, @Res() res: Response) {
+    return this.authService.userExistence(authDto, res);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  // Clinic Login Endpoint
+  @Post("clinic-login")
+  @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
+  clinicExistence(@Body() authDto: AuthDto, @Res() res: Response) {
+    return this.authService.clinicExistence(authDto, res);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @Post("check-otp")
+  @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
+  checkOtp(@Body() checkOtpDto: CheckOtpDto) {
+    return this.authService.checkOTP(checkOtpDto.code);
   }
 }
