@@ -10,7 +10,8 @@ async function bootstrap() {
   SwaggerConfigInit(app);
 
   // Start Server
-  const PORT = +3000;
+  // const PORT = +3000;
+  const { PORT } = process.env;
   await app.listen(PORT, () => {
     console.log(`Root:    http://localhost:${PORT}`);
     console.log(`Swagger: http://localhost:${PORT}/swagger`);
