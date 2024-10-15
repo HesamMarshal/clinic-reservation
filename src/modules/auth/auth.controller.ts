@@ -13,7 +13,7 @@ export class AuthController {
   // user Login endpoint
   @Post("user-login")
   @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
-  userExistence(@Body() authDto: AuthDto, @Res() res: Response) {
+  async userExistence(@Body() authDto: AuthDto, @Res() res: Response) {
     return this.authService.userExistence(authDto, res);
   }
 
