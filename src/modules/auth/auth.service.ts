@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { AuthDto } from "./dto/auth.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "../user/entities/user.entity";
@@ -8,9 +8,10 @@ import { OtpEntity } from "../user/entities/otp.entity";
 import { Request, Response } from "express";
 import { AuthResponse } from "./types/response";
 import { TokenService } from "./tokens.service";
-import { PublicMessage } from "./enums/message.enum";
+import { AuthMessage, PublicMessage } from "./enums/message.enum";
 import { CookieKeys } from "src/common/enums/cookie.enum";
 import { CookieOptions } from "src/common/utils/cookie.util";
+import { REQUEST } from "@nestjs/core";
 
 @Injectable()
 export class AuthService {
@@ -21,9 +22,14 @@ export class AuthService {
     @InjectRepository(OtpEntity)
     private otpRepository: Repository<OtpEntity>,
 
+    // make request available on all scope
+    @Inject(REQUEST)
+    private request: Request,
+
     private tokenService: TokenService
   ) {}
 
+  // Endpoints
   async userExistence(authDto: AuthDto, res: Response) {
     const clinicId = null;
     const { mobile } = authDto;
@@ -42,6 +48,53 @@ export class AuthService {
     console.log(result);
 
     return this.sendResponse(res, result);
+  }
+
+  async clinicExistence(authDto: AuthDto, res: Response) {}
+
+  async checkOTP(code: string) {
+    // Checks if the code in browser cookie is equal to the code in DB
+    const token = this.request.cookies?.[CookieKeys.OTP];
+    console.log(token);
+
+    if (!token) throw new UnauthorizedException(AuthMessage.ExpiredCode);
+
+    const { userId } = this.tokenService.verifyOtpToken(token);
+    console.log(userId);
+    const otp = await this.otpRepository.findOneBy({ userId: userId });
+
+    // TODO:  Improve messages
+    if (!otp) throw new UnauthorizedException(AuthMessage.LoginAgain);
+
+    const now = new Date();
+    if (otp.expiresIn < now)
+      throw new UnauthorizedException(AuthMessage.ExpiredCode);
+
+    if (otp.code !== code)
+      throw new UnauthorizedException(AuthMessage.TryAgain);
+
+    // Create access token
+    const accessToken = this.tokenService.createAccessToken({ userId });
+
+    return {
+      message: PublicMessage.LoggedIn,
+      accessToken,
+    };
+  }
+
+  // Helper methods
+  async login(userId: number, clinicId: number) {
+    // Create and Save OTP in DB
+    const otp = await this.saveOTP(userId, clinicId);
+
+    // Create token that contains UserId, we use it identify the user
+    const token = this.tokenService.createOtpToken({ userId });
+
+    // console.log(otp);
+    return {
+      token,
+      code: otp.code,
+    };
   }
   async userRegister(mobile: string) {
     // add user to user table
@@ -62,27 +115,6 @@ export class AuthService {
       message: "test",
     };
   }
-
-  async login(userId: number, clinicId: number) {
-    // Create and Save OTP in DB
-    const otp = await this.saveOTP(userId, clinicId);
-
-    // Create token that contains UserId, we use it identify the user
-    const token = this.tokenService.createOtpToken({ userId });
-
-    // console.log(otp);
-    return {
-      token,
-      code: otp.code,
-    };
-  }
-  async clinicExistence(authDto: AuthDto, res: Response) {}
-
-  checkOTP(code: string) {
-    throw new Error("Method not implemented.");
-  }
-
-  // Helper methods
 
   async saveOTP(userId: number, clinicId: number) {
     // Create OTP code and save in DB
