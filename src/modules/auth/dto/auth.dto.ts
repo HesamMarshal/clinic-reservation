@@ -1,7 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsString, Length } from "class-validator";
-import { AuthType } from "../enums/type.enum";
-import { UserType } from "../enums/userType.enum";
 
 export class AuthDto {
   @ApiProperty()
