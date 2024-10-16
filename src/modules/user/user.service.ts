@@ -18,11 +18,17 @@ export class UserService {
     @Inject(REQUEST) private request: Request
   ) {}
   findAll() {
-    return `This action returns all user`;
+    const result = this.userRepository.find();
+
+    return result;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne() {
+    //  get user from token
+    const { id } = this.request.user;
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) throw new NotFoundException(NotFoundMessage.UserNotFount);
+    return user;
   }
 
   async update(changeNameDto: ChangeNameDto) {
@@ -30,9 +36,6 @@ export class UserService {
     const { first_name, last_name } = changeNameDto;
     const { id } = this.request.user;
     const user = await this.userRepository.findOneBy({ id });
-    console.log(first_name, last_name);
-    console.log(id);
-    console.log(user);
 
     if (!user) throw new NotFoundException(NotFoundMessage.UserNotFount);
 
@@ -40,7 +43,10 @@ export class UserService {
     return { message: PublicMessage.Updated };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove() {
+    const { id } = this.request.user;
+    const user = await this.userRepository.findOneBy({ id });
+    this.userRepository.remove(user);
+    return { message: PublicMessage.Deleted };
   }
 }

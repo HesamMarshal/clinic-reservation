@@ -1,17 +1,13 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseGuards,
   Put,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { SwaggerConsumes } from "src/common/swagger-consume.enum";
@@ -24,14 +20,17 @@ import { ChangeNameDto } from "./dto/user.dto";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get("admin-only")
   findAll() {
+    //  this section only must be availbale for admins.
+    //  we implemented this just to make it easier for implementation.
+
     return this.userService.findAll();
   }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.userService.findOne(+id);
+  @Get("my")
+  findOne() {
+    return this.userService.findOne();
   }
 
   @Put("edit-name")
@@ -40,8 +39,8 @@ export class UserController {
     return this.userService.update(changeNameDto);
   }
 
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.userService.remove(+id);
+  @Delete("")
+  remove() {
+    return this.userService.remove();
   }
 }
