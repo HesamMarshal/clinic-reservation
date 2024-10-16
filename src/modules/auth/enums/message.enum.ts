@@ -23,7 +23,9 @@ export enum CategoryMessage {
   Updated = "دسته بندی با موفقیت به روز رسانی گردید",
 }
 
-export enum NotFoundMessage {}
+export enum NotFoundMessage {
+  UserNotFount = "کاربر پیدا نشد",
+}
 export enum ValidationMessage {
   InvalidPhoneForamt = "فرمت شماره موبایل وارد شده قابل قبول نیست",
 }
