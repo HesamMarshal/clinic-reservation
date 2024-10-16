@@ -11,10 +11,7 @@ import { BaseEntity } from "src/common/abstracts/base.entity";
 
 @Entity(EntityName.User)
 export class UserEntity extends BaseEntity {
-  // // Fileds
-  // @PrimaryGeneratedColumn("increment")
-  // id: number;
-
+  // Fileds
   @Column({ nullable: true })
   first_name: string;
 

@@ -6,9 +6,6 @@ import { BaseEntity } from "src/common/abstracts/base.entity";
 @Entity(EntityName.Otp)
 export class OtpEntity extends BaseEntity {
   // Fileds
-  // @PrimaryGeneratedColumn("increment")
-  // id: number;
-
   @Column({ nullable: true })
   userId: number;
 
