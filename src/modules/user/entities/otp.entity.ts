@@ -1,13 +1,13 @@
-import { BaseEntity } from "src/common/abstracts/base.entity";
 import { EntityName } from "src/common/enums/entity.enum";
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserEntity } from "./user.entity";
+import { BaseEntity } from "src/common/abstracts/base.entity";
 
 @Entity(EntityName.Otp)
-export class OtpEntity {
+export class OtpEntity extends BaseEntity {
   // Fileds
-  @PrimaryGeneratedColumn("increment")
-  id: number;
+  // @PrimaryGeneratedColumn("increment")
+  // id: number;
 
   @Column({ nullable: true })
   userId: number;
