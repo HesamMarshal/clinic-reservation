@@ -23,8 +23,7 @@ export class AuthService {
     private otpRepository: Repository<OtpEntity>,
 
     // make request available on all scope
-    @Inject(REQUEST)
-    private request: Request,
+    @Inject(REQUEST) private request: Request,
 
     private tokenService: TokenService
   ) {}
