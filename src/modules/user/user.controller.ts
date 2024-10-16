@@ -6,21 +6,22 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Put,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { AuthGuard } from "../auth/guards/auth.guard";
+import { SwaggerConsumes } from "src/common/swagger-consume.enum";
 
 @Controller("user")
 @ApiTags("User")
+@ApiBearerAuth("Authorization")
+@UseGuards(AuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
 
   @Get()
   findAll() {
@@ -32,8 +33,9 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
+  @Put("edit/:mobile")
+  @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
+  update(@Param("mobile") id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }
 
