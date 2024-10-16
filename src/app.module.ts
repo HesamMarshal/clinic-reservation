@@ -8,6 +8,7 @@ import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { TypeOrmConfig } from "./config/typeorm.config";
+import { ClinicModule } from './modules/clinic/clinic.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TypeOrmConfig } from "./config/typeorm.config";
     TypeOrmModule.forRoot(TypeOrmConfig()),
     UserModule,
     AuthModule,
+    ClinicModule,
   ],
   controllers: [AppController],
   providers: [AppService],
