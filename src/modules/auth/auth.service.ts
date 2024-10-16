@@ -44,7 +44,6 @@ export class AuthService {
 
     // Send Otp Code By SMS
     this.sendOTP();
-    console.log(result);
 
     return this.sendResponse(res, result);
   }
@@ -54,12 +53,10 @@ export class AuthService {
   async checkOTP(code: string) {
     // Checks if the code in browser cookie is equal to the code in DB
     const token = this.request.cookies?.[CookieKeys.OTP];
-    console.log(token);
 
     if (!token) throw new UnauthorizedException(AuthMessage.ExpiredCode);
 
     const { userId } = this.tokenService.verifyOtpToken(token);
-    console.log(userId);
     const otp = await this.otpRepository.findOneBy({ userId: userId });
 
     // TODO:  Improve messages
@@ -89,7 +86,6 @@ export class AuthService {
     // Create token that contains UserId, we use it identify the user
     const token = this.tokenService.createOtpToken({ userId });
 
-    // console.log(otp);
     return {
       token,
       code: otp.code,
@@ -104,7 +100,6 @@ export class AuthService {
     user = await this.userRepository.save(user);
 
     const otp = await this.saveOTP(user.id, null);
-    // console.log(otp);
 
     const token = this.tokenService.createOtpToken({ userId: user.id });
     // return user;
@@ -158,7 +153,6 @@ export class AuthService {
     res.cookie(CookieKeys.OTP, token, CookieOptions());
     res.json({
       message: PublicMessage.SendOtp,
-      token,
       code,
     });
   }
