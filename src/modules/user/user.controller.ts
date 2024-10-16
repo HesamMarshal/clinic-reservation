@@ -15,6 +15,7 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { SwaggerConsumes } from "src/common/swagger-consume.enum";
+import { ChangeNameDto } from "./dto/user.dto";
 
 @Controller("user")
 @ApiTags("User")
@@ -33,10 +34,10 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-  @Put("edit/:mobile")
+  @Put("edit-name")
   @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
-  update(@Param("mobile") id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  update(@Body() changeNameDto: ChangeNameDto) {
+    return this.userService.update(changeNameDto);
   }
 
   @Delete(":id")
