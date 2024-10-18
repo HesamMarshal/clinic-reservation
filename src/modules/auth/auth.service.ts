@@ -12,12 +12,16 @@ import { AuthMessage, PublicMessage } from "./enums/message.enum";
 import { CookieKeys } from "src/common/enums/cookie.enum";
 import { CookieOptions } from "src/common/utils/cookie.util";
 import { REQUEST } from "@nestjs/core";
+import { ClinicEntity } from "../clinic/entities/clinic.entity";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+
+    @InjectRepository(ClinicEntity)
+    private clinicRepository: Repository<ClinicEntity>,
 
     @InjectRepository(OtpEntity)
     private otpRepository: Repository<OtpEntity>,
@@ -48,7 +52,24 @@ export class AuthService {
     return this.sendResponse(res, result);
   }
 
-  async clinicExistence(authDto: AuthDto, res: Response) {}
+  async clinicExistence(authDto: AuthDto, res: Response) {
+    const userId = null;
+    const { mobile } = authDto;
+    let result = null;
+    // let result: AuthResponse;
+
+    let clinic = await this.clinicRepository.findOneBy({ mobile_no: mobile });
+    if (!clinic) {
+      result = await this.clinicRegister(mobile);
+    } else {
+      result = await this.login(null, clinic.id);
+    }
+
+    // Send Otp Code By SMS
+    this.sendOTP();
+
+    return this.sendResponse(res, result);
+  }
 
   async checkOTP(code: string) {
     // Checks if the code in browser cookie is equal to the code in DB
@@ -56,8 +77,11 @@ export class AuthService {
 
     if (!token) throw new UnauthorizedException(AuthMessage.ExpiredCode);
 
-    const { userId } = this.tokenService.verifyOtpToken(token);
-    const otp = await this.otpRepository.findOneBy({ userId: userId });
+    const { userId, clinicId } = this.tokenService.verifyOtpToken(token);
+    let otp = null;
+
+    if (userId) otp = await this.otpRepository.findOneBy({ userId });
+    else if (clinicId) otp = await this.otpRepository.findOneBy({ clinicId });
 
     // TODO:  Improve messages
     if (!otp) throw new UnauthorizedException(AuthMessage.LoginAgain);
@@ -70,7 +94,17 @@ export class AuthService {
       throw new UnauthorizedException(AuthMessage.TryAgain);
 
     // Create access token
-    const accessToken = this.tokenService.createAccessToken({ userId });
+    let accessToken = null;
+    if (userId)
+      accessToken = this.tokenService.createAccessToken({
+        userId,
+        clinicId: null,
+      });
+    else if (clinicId)
+      accessToken = this.tokenService.createAccessToken({
+        userId: null,
+        clinicId,
+      });
 
     return {
       message: PublicMessage.LoggedIn,
@@ -82,9 +116,11 @@ export class AuthService {
   async login(userId: number, clinicId: number) {
     // Create and Save OTP in DB
     const otp = await this.saveOTP(userId, clinicId);
+    let token = null;
 
     // Create token that contains UserId, we use it identify the user
-    const token = this.tokenService.createOtpToken({ userId });
+    if (userId) token = this.tokenService.createOtpToken({ userId, clinicId });
+    // else if (clinicId) token = this.tokenService.createOtpToken({ clinicId });
 
     return {
       token,
@@ -101,12 +137,37 @@ export class AuthService {
 
     const otp = await this.saveOTP(user.id, null);
 
-    const token = this.tokenService.createOtpToken({ userId: user.id });
+    const token = this.tokenService.createOtpToken({
+      userId: user.id,
+      clinicId: null,
+    });
     // return user;
     return {
       token,
       code: otp.code,
-      message: "test",
+    };
+  }
+
+  async clinicRegister(mobile: string) {
+    // add clinic to clinic table
+    let clinic = await this.clinicRepository.create({
+      mobile_no: mobile,
+    });
+    console.log("clinicRegistration");
+    // Save the new clinic
+    clinic = await this.clinicRepository.save(clinic);
+    console.log(clinic);
+    const otp = await this.saveOTP(null, clinic.id);
+
+    const token = this.tokenService.createOtpToken({
+      userId: null,
+      clinicId: clinic.id,
+    });
+
+    // return clinic;
+    return {
+      token,
+      code: otp.code,
     };
   }
 
@@ -120,9 +181,8 @@ export class AuthService {
     let existOtp = false;
     if (userId) {
       otp = await this.otpRepository.findOneBy({ userId });
-    }
-    if (clinicId) {
-      otp = await this.otpRepository.findOneBy({ userId });
+    } else if (clinicId) {
+      otp = await this.otpRepository.findOneBy({ clinicId });
     }
 
     if (otp) {
