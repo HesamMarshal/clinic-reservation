@@ -120,7 +120,8 @@ export class AuthService {
 
     // Create token that contains UserId, we use it identify the user
     if (userId) token = this.tokenService.createOtpToken({ userId, clinicId });
-    // else if (clinicId) token = this.tokenService.createOtpToken({ clinicId });
+    else if (clinicId)
+      token = this.tokenService.createOtpToken({ userId, clinicId });
 
     return {
       token,
@@ -153,10 +154,9 @@ export class AuthService {
     let clinic = await this.clinicRepository.create({
       mobile_no: mobile,
     });
-    console.log("clinicRegistration");
+
     // Save the new clinic
     clinic = await this.clinicRepository.save(clinic);
-    console.log(clinic);
     const otp = await this.saveOTP(null, clinic.id);
 
     const token = this.tokenService.createOtpToken({
