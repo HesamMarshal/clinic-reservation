@@ -24,9 +24,7 @@ export class ClinicService {
 
     @Inject(REQUEST) private request: Request
   ) {}
-  create() {
-    return "This action adds a new clinic";
-  }
+
   findAll() {
     const result = this.clinicRepository.find();
 
