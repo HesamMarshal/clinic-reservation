@@ -24,13 +24,13 @@ export class ClinicEntity extends BaseEntity {
   @Column({ nullable: true })
   otpId: number;
 
-  @Column({ unique: true })
+  @Column({ nullable: true })
   address: string;
 
-  @Column({ unique: true })
+  @Column({ nullable: true })
   status: string;
 
-  @Column({ unique: true })
+  @Column({ nullable: true })
   confirmed_at: Date;
 
   //  Date & time
