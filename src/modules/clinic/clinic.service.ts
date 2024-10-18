@@ -44,7 +44,9 @@ export class ClinicService {
   async update(updateClinicDto: UpdateClinicDto) {
     //  get user from token
     const { first_name, last_name, address, mobile_no } = updateClinicDto;
-    const { id } = this.request.clinic;
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.LoginAgain);
+    const { id } = clinic;
     const user = await this.clinicRepository.findOneBy({ id });
 
     if (!user) throw new NotFoundException(NotFoundMessage.ClinicNotFount);
@@ -56,7 +58,12 @@ export class ClinicService {
     return { message: PublicMessage.Updated };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} clinic`;
+  async remove() {
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.LoginAgain);
+    const { id } = clinic;
+    const result = await this.clinicRepository.findOneBy({ id });
+    this.clinicRepository.remove(result);
+    return { message: PublicMessage.Deleted };
   }
 }
