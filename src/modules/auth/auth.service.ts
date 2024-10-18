@@ -222,10 +222,20 @@ export class AuthService {
   }
 
   async validateAccessToken(token: string) {
-    const { userId } = this.tokenService.verifyAccessToken(token);
-    const user = await this.userRepository.findOneBy({ id: userId });
-    if (!user) throw new UnauthorizedException(AuthMessage.LoginAgain);
+    const { userId, clinicId } = this.tokenService.verifyAccessToken(token);
+    let user = null;
+    let clinic = null;
 
-    return user;
+    if (userId) {
+      user = await this.userRepository.findOneBy({ id: userId });
+      if (!user) throw new UnauthorizedException(AuthMessage.LoginAgain);
+    }
+
+    if (clinicId) {
+      clinic = await this.clinicRepository.findOneBy({ id: clinicId });
+      if (!clinic) throw new UnauthorizedException(AuthMessage.LoginAgain);
+    }
+
+    return { user, clinic };
   }
 }
