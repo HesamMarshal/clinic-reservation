@@ -5,7 +5,6 @@ import { DataSource } from "typeorm";
 config();
 config({ path: join(process.cwd(), ".env") });
 const { DB_HOST, DB_NAME, DB_PORT, DB_USERNAME, DB_PASSWORD } = process.env;
-console.log({ DB_HOST, DB_NAME, DB_PORT, DB_USERNAME, DB_PASSWORD });
 let dataSource = new DataSource({
   type: "postgres",
   host: DB_HOST,
