@@ -40,8 +40,8 @@ export class ClinicController {
     return this.clinicService.update(updateClinicDto);
   }
 
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.clinicService.remove(+id);
+  @Delete()
+  remove() {
+    return this.clinicService.remove();
   }
 }
