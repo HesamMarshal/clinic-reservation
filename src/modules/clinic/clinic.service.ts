@@ -41,8 +41,19 @@ export class ClinicService {
     return result;
   }
 
-  update(id: number, updateClinicDto: UpdateClinicDto) {
-    return `This action updates a #${id} clinic`;
+  async update(updateClinicDto: UpdateClinicDto) {
+    //  get user from token
+    const { first_name, last_name, address, mobile_no } = updateClinicDto;
+    const { id } = this.request.clinic;
+    const user = await this.clinicRepository.findOneBy({ id });
+
+    if (!user) throw new NotFoundException(NotFoundMessage.ClinicNotFount);
+
+    await this.clinicRepository.update(
+      { id },
+      { first_name, last_name, address, mobile_no }
+    );
+    return { message: PublicMessage.Updated };
   }
 
   remove(id: number) {
