@@ -1,5 +1,5 @@
 import { EntityName } from "src/common/enums/entity.enum";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne } from "typeorm";
 import { UserEntity } from "./user.entity";
 import { BaseEntity } from "src/common/abstracts/base.entity";
 import { ClinicEntity } from "src/modules/clinic/entities/clinic.entity";

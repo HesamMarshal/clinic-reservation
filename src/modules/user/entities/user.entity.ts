@@ -1,11 +1,5 @@
 import { EntityName } from "src/common/enums/entity.enum";
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import { OtpEntity } from "./otp.entity";
 import { BaseEntity } from "src/common/abstracts/base.entity";
 
