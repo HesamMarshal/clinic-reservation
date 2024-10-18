@@ -1,19 +1,46 @@
-import { Injectable } from '@nestjs/common';
-import { CreateClinicDto } from './dto/create-clinic.dto';
-import { UpdateClinicDto } from './dto/update-clinic.dto';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
+import { UpdateClinicDto } from "./dto/update-clinic.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ClinicEntity } from "./entities/clinic.entity";
+import { Repository } from "typeorm";
+import { REQUEST } from "@nestjs/core";
+import {
+  AuthMessage,
+  NotFoundMessage,
+  PublicMessage,
+} from "../auth/enums/message.enum";
+import { Request } from "express";
 
 @Injectable()
 export class ClinicService {
-  create(createClinicDto: CreateClinicDto) {
-    return 'This action adds a new clinic';
-  }
+  constructor(
+    @InjectRepository(ClinicEntity)
+    private clinicRepository: Repository<ClinicEntity>,
 
+    @Inject(REQUEST) private request: Request
+  ) {}
+  create() {
+    return "This action adds a new clinic";
+  }
   findAll() {
-    return `This action returns all clinic`;
+    const result = this.clinicRepository.find();
+
+    return result;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} clinic`;
+  async findOne() {
+    //  get clinic from token
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.LoginAgain);
+    const { id } = clinic;
+    const result = await this.clinicRepository.findOneBy({ id });
+    if (!result) throw new NotFoundException(NotFoundMessage.UserNotFount);
+    return result;
   }
 
   update(id: number, updateClinicDto: UpdateClinicDto) {
