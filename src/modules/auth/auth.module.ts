@@ -6,9 +6,10 @@ import { UserEntity } from "../user/entities/user.entity";
 import { OtpEntity } from "../user/entities/otp.entity";
 import { TokenService } from "./tokens.service";
 import { JwtService } from "@nestjs/jwt";
+import { ClinicEntity } from "../clinic/entities/clinic.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity, OtpEntity])],
+  imports: [TypeOrmModule.forFeature([UserEntity, OtpEntity, ClinicEntity])],
   controllers: [AuthController],
   providers: [AuthService, JwtService, TokenService],
   exports: [AuthService, JwtService, TokenService, TypeOrmModule],
