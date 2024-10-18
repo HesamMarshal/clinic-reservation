@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { ChangeNameDto } from "./dto/user.dto";
@@ -7,7 +12,11 @@ import { UserEntity } from "./entities/user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Request } from "express";
-import { NotFoundMessage, PublicMessage } from "../auth/enums/message.enum";
+import {
+  AuthMessage,
+  NotFoundMessage,
+  PublicMessage,
+} from "../auth/enums/message.enum";
 
 @Injectable()
 export class UserService {
@@ -25,10 +34,13 @@ export class UserService {
 
   async findOne() {
     //  get user from token
-    const { id } = this.request.user;
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user) throw new NotFoundException(NotFoundMessage.UserNotFount);
-    return user;
+    const { user } = this?.request;
+    console.log(user);
+    if (!user) throw new UnauthorizedException(AuthMessage.LoginAgain);
+    const { id } = user;
+    const result = await this.userRepository.findOneBy({ id });
+    if (!result) throw new NotFoundException(NotFoundMessage.UserNotFount);
+    return result;
   }
 
   async update(changeNameDto: ChangeNameDto) {
