@@ -13,7 +13,7 @@ import { UpdateCategoryDto } from "./dto/update-category.dto";
 import { ApiTags } from "@nestjs/swagger";
 
 @Controller("category")
-@ApiTags("Clinic")
+@ApiTags("Category")
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
