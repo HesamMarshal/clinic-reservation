@@ -26,9 +26,11 @@ export enum CategoryMessage {
 export enum NotFoundMessage {
   UserNotFount = "کاربر پیدا نشد",
   ClinicNotFount = "کلینک پیدا نشد",
+  CategoryNotFount = "دسته بندی پیدا نشد",
 }
 export enum ValidationMessage {
   InvalidPhoneForamt = "فرمت شماره موبایل وارد شده قابل قبول نیست",
+  InvalidImageForamt = "فرمت تصویر وارد شده قابل قبول نیست",
 }
 export enum PublicMessage {
   SendOtp = "کد یکبار مصرف ارسال شد",
