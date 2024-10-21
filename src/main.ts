@@ -11,6 +11,9 @@ async function bootstrap() {
   // Configure Swagger
   SwaggerConfigInit(app);
 
+  // Static folder
+  app.useStaticAssets("public");
+
   // Activate Validation
   app.useGlobalPipes(new ValidationPipe());
 
