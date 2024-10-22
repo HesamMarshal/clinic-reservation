@@ -4,12 +4,12 @@ export class CreateCategoryDto {
   @ApiProperty()
   title: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   slug: string;
 
   @ApiPropertyOptional()
   description: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ format: "binary" })
   image: string;
 }
