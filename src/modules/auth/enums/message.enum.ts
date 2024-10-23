@@ -28,6 +28,7 @@ export enum NotFoundMessage {
   UserNotFount = "کاربر پیدا نشد",
   ClinicNotFount = "کلینک پیدا نشد",
   CategoryNotFount = "دسته بندی پیدا نشد",
+  PlanNotFound = "برنامه ای پیدا نشد",
 }
 export enum ValidationMessage {
   InvalidPhoneForamt = "فرمت شماره موبایل وارد شده قابل قبول نیست",
