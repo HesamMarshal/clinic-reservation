@@ -2,10 +2,8 @@ import { BaseEntity } from "src/common/abstracts/base.entity";
 import { EntityName } from "src/common/enums/entity.enum";
 import { Column, Entity } from "typeorm";
 
-export class Planner {}
-
 @Entity(EntityName.Planner)
-export class ClinicEntity extends BaseEntity {
+export class PlannerEntity extends BaseEntity {
   // Fileds
   @Column()
   clinicId: string;
