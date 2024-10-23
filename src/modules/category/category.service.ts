@@ -83,8 +83,45 @@ export class CategoryService {
     return category;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(
+    id: number,
+    file: CategoryImages,
+    updateCategoryDto: UpdateCategoryDto
+  ) {
+    if (file?.image?.length > 0) {
+      let [image] = file?.image;
+      updateCategoryDto.image = image?.path?.slice(7);
+    }
+
+    let { title, slug, description, image } = updateCategoryDto;
+    const oldCategory = await this.findById(id);
+
+    if (title) oldCategory.title = title;
+    if (slug) {
+      slug = createSlug(slug);
+      const isExist = await this.checkCategoryBySlug(slug);
+      if (isExist) {
+        slug += `-${randomId()}`;
+      }
+      oldCategory.slug = slug;
+    }
+    if (description) oldCategory.description = description;
+    if (image) oldCategory.image = image;
+
+    this.categoryRepository.update(
+      { id },
+      {
+        title,
+        slug,
+        description,
+        image,
+      }
+    );
+
+    // category = await this.categoryRepository.save(category);
+    return {
+      message: PublicMessage.Updated,
+    };
   }
 
   async remove(id: number) {

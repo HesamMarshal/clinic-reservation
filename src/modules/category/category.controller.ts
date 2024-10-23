@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   UseInterceptors,
@@ -51,12 +51,19 @@ export class CategoryController {
     return this.categoryService.findBySlug(slug);
   }
 
-  @Patch(":id")
+  @ApiConsumes(SwaggerConsumes.MultipartData)
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: "image", maxCount: 1 }], {
+      storage: multerStorage("category-image"),
+    })
+  )
+  @Put(":id")
   update(
     @Param("id") id: string,
+    @UploadedOptionalFiles() file: CategoryImages,
     @Body() updateCategoryDto: UpdateCategoryDto
   ) {
-    return this.categoryService.update(+id, updateCategoryDto);
+    return this.categoryService.update(+id, file, updateCategoryDto);
   }
 
   @Delete(":id")
