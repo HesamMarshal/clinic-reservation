@@ -6,13 +6,22 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "../user/entities/user.entity";
 import { OtpEntity } from "../user/entities/otp.entity";
 import { ClinicEntity } from "./entities/clinic.entity";
+import { CategoryEntity } from "../category/entities/category.entity";
+import { CategoryService } from "../category/category.service";
+import { CategoryModule } from "../category/category.module";
 
 @Module({
   imports: [
     AuthModule,
-    TypeOrmModule.forFeature([UserEntity, OtpEntity, ClinicEntity]),
+    CategoryModule,
+    TypeOrmModule.forFeature([
+      UserEntity,
+      OtpEntity,
+      ClinicEntity,
+      CategoryEntity,
+    ]),
   ],
   controllers: [ClinicController],
-  providers: [ClinicService],
+  providers: [ClinicService, CategoryService],
 })
 export class ClinicModule {}
