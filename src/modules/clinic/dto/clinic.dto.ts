@@ -18,4 +18,8 @@ export class ClinicDto {
   @ApiPropertyOptional()
   @Length(10, 200)
   address: string;
+
+  @ApiProperty()
+  @Length(3, 50)
+  category: string;
 }
