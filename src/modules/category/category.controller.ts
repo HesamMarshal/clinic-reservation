@@ -7,19 +7,23 @@ import {
   Param,
   Delete,
   UseInterceptors,
+  UseGuards,
 } from "@nestjs/common";
 import { CategoryService } from "./category.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
-import { ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { SwaggerConsumes } from "src/common/swagger-consume.enum";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { multerStorage } from "src/common/utils/multer.util";
 import { CategoryImages } from "./types/files.type";
 import { UploadedOptionalFiles } from "src/common/decorators/upload-file.decorator";
+import { AuthGuard } from "../auth/guards/auth.guard";
 
 @Controller("category")
 @ApiTags("Category")
+@ApiBearerAuth("Authorization")
+@UseGuards(AuthGuard)
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 

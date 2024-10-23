@@ -1,21 +1,37 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
 import { createSlug, randomId } from "src/common/utils/functions.util";
 import { CategoryEntity } from "./entities/category.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { NotFoundMessage, PublicMessage } from "../auth/enums/message.enum";
+import {
+  AuthMessage,
+  NotFoundMessage,
+  PublicMessage,
+} from "../auth/enums/message.enum";
 import { CategoryImages } from "./types/files.type";
+import { REQUEST } from "@nestjs/core";
+import { Request } from "express";
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectRepository(CategoryEntity)
-    private categoryRepository: Repository<CategoryEntity>
+    private categoryRepository: Repository<CategoryEntity>,
+    @Inject(REQUEST) private request: Request
   ) {}
 
   async create(file: CategoryImages, createCategoryDto: CreateCategoryDto) {
+    // if the logged in user is not a clinic can work on category
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
+
     if (file?.image?.length > 0) {
       let [image] = file?.image;
       createCategoryDto.image = image?.path?.slice(7);
@@ -43,6 +59,10 @@ export class CategoryService {
     };
   }
   async createWithTitle(title: string) {
+    // if the logged in user is not a clinic can work on category
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
+
     let slug = title;
     let slugData = slug ?? title;
     slug = createSlug(slugData);
@@ -62,17 +82,29 @@ export class CategoryService {
   }
 
   async findAll() {
+    // if the logged in user is not a clinic can work on category
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
+
     const categories = await this.categoryRepository.find();
     return categories;
   }
 
   async findById(id: number) {
+    // if the logged in user is not a clinic can work on category
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
+
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category)
       throw new NotFoundException(NotFoundMessage.CategoryNotFount);
     return category;
   }
   async findBySlug(slug: string) {
+    // if the logged in user is not a clinic can work on category
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
+
     let slugData = createSlug(slug);
     const category = await this.categoryRepository.findOneBy({
       slug: slugData,
@@ -88,6 +120,10 @@ export class CategoryService {
     file: CategoryImages,
     updateCategoryDto: UpdateCategoryDto
   ) {
+    // if the logged in user is not a clinic can work on category
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
+
     if (file?.image?.length > 0) {
       let [image] = file?.image;
       updateCategoryDto.image = image?.path?.slice(7);
@@ -118,13 +154,16 @@ export class CategoryService {
       }
     );
 
-    // category = await this.categoryRepository.save(category);
     return {
       message: PublicMessage.Updated,
     };
   }
 
   async remove(id: number) {
+    // if the logged in user is not a clinic can work on category
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
+
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category)
       throw new NotFoundException(NotFoundMessage.CategoryNotFount);
