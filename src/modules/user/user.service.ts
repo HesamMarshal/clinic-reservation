@@ -4,8 +4,6 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
 import { ChangeNameDto } from "./dto/user.dto";
 import { REQUEST } from "@nestjs/core";
 import { UserEntity } from "./entities/user.entity";

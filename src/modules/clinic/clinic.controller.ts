@@ -7,7 +7,6 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { ClinicService } from "./clinic.service";
-
 import { UpdateClinicDto } from "./dto/update-clinic.dto";
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../auth/guards/auth.guard";
