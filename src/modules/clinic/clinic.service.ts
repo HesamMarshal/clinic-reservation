@@ -16,6 +16,7 @@ import {
 } from "../auth/enums/message.enum";
 import { Request } from "express";
 import { CategoryService } from "../category/category.service";
+import { EntityName } from "src/common/enums/entity.enum";
 
 @Injectable()
 export class ClinicService {
@@ -27,9 +28,21 @@ export class ClinicService {
     @Inject(REQUEST) private request: Request
   ) {}
 
-  findAll() {
-    const result = this.clinicRepository.find();
-
+  async findAll() {
+    const result = await this.clinicRepository
+      .createQueryBuilder(EntityName.Clinic)
+      .leftJoin("clinic.category", "category")
+      .addSelect(["category.title"])
+      .select([
+        "clinic.id",
+        "clinic.first_name",
+        "clinic.last_name",
+        "clinic.mobile_no",
+        "clinic.address",
+        "category.title",
+      ])
+      .where({})
+      .getMany();
     return result;
   }
 
@@ -38,8 +51,22 @@ export class ClinicService {
     const { clinic } = this?.request;
     if (!clinic) throw new UnauthorizedException(AuthMessage.LoginAgain);
     const { id } = clinic;
-    const result = await this.clinicRepository.findOneBy({ id });
-    if (!result) throw new NotFoundException(NotFoundMessage.UserNotFount);
+    const result = await this.clinicRepository
+      .createQueryBuilder(EntityName.Clinic)
+      .leftJoin("clinic.category", "category")
+      .addSelect(["category.title"])
+      .select([
+        "clinic.id",
+        "clinic.first_name",
+        "clinic.last_name",
+        "clinic.mobile_no",
+        "clinic.address",
+        "category.title",
+      ])
+      .where({ id })
+      .getOne();
+
+    if (!result) throw new NotFoundException(NotFoundMessage.ClinicNotFount);
     return result;
   }
 
