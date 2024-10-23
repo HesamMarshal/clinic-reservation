@@ -9,6 +9,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { TypeOrmConfig } from "./config/typeorm.config";
 import { ClinicModule } from "./modules/clinic/clinic.module";
 import { CategoryModule } from './modules/category/category.module';
+import { PlannerModule } from './modules/planner/planner.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CategoryModule } from './modules/category/category.module';
     UserModule,
     ClinicModule,
     CategoryModule,
+    PlannerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
