@@ -10,6 +10,7 @@ export enum AuthMessage {
   ExpiredCode = "کد تایید منقضی شده است",
   LoginAgain = "مجدد وارد حساب کاربری خود شوید",
   LoginIsRequired = "وارد حساب کاربری خود شوید",
+  ClinicLogin = "برای دسترسی به این بخش باید با حساب کاربری کلینیک وارد شوید",
 }
 export enum UserMessage {
   Updated = "حساب کاربری به روز رسانی شد",
