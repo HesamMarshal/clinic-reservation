@@ -42,6 +42,24 @@ export class CategoryService {
       message: PublicMessage.Created,
     };
   }
+  async createWithTitle(title: string) {
+    let slug = title;
+    let slugData = slug ?? title;
+    slug = createSlug(slugData);
+
+    const isExist = await this.checkCategoryBySlug(slug);
+    if (isExist) {
+      slug += `-${randomId()}`;
+    }
+
+    let category = this.categoryRepository.create({
+      title,
+      slug,
+    });
+
+    category = await this.categoryRepository.save(category);
+    return category;
+  }
 
   async findAll() {
     const categories = await this.categoryRepository.find();
@@ -82,7 +100,10 @@ export class CategoryService {
 
   // Helpers
   async checkCategoryBySlug(slug: string) {
-    const category = await this.categoryRepository.findOneBy({ slug });
+    let slugData = createSlug(slug);
+    const category = await this.categoryRepository.findOneBy({
+      slug: slugData,
+    });
     return category;
   }
 }
