@@ -1,5 +1,6 @@
 import { BaseEntity } from "src/common/abstracts/base.entity";
 import { EntityName } from "src/common/enums/entity.enum";
+import { CategoryEntity } from "src/modules/category/entities/category.entity";
 import { OtpEntity } from "src/modules/user/entities/otp.entity";
 import {
   Column,
@@ -31,6 +32,9 @@ export class ClinicEntity extends BaseEntity {
   status: string;
 
   @Column({ nullable: true })
+  categoryId: number;
+
+  @Column({ nullable: true })
   confirmed_at: Date;
 
   //  Date & time
@@ -41,4 +45,9 @@ export class ClinicEntity extends BaseEntity {
   @OneToOne(() => OtpEntity, (otp) => otp.clinic, { nullable: true })
   @JoinColumn()
   otp: OtpEntity;
+
+  // Relations
+  @OneToOne(() => CategoryEntity, (category) => category.id, { nullable: true })
+  @JoinColumn()
+  category: CategoryEntity;
 }
