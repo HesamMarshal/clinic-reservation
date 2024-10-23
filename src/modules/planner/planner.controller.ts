@@ -31,9 +31,9 @@ export class PlannerController {
     return this.plannerService.findAll();
   }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.plannerService.findOne(+id);
+  @Get("/my")
+  findOne() {
+    return this.plannerService.findOne();
   }
 
   @Patch(":id")
