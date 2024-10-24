@@ -16,6 +16,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { PlannerEntity } from "./entities/planner.entity";
 import { Repository } from "typeorm";
+import { isTrue } from "src/common/utils/functions.util";
 
 @Injectable()
 export class PlannerService {
@@ -64,11 +65,43 @@ export class PlannerService {
     return plans;
   }
 
-  update(id: number, updatePlannerDto: UpdatePlannerDto) {
+  async update(id: number, updatePlannerDto: UpdatePlannerDto) {
     // if the logged in user is not a clinic can work on category
     const { clinic } = this?.request;
     if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
-    return `This action updates a #${id} planner`;
+    const { id: clinicId } = clinic;
+    const { dayName, day_number, start_time, finish_time, status } =
+      updatePlannerDto;
+    const [plan] = await this.plannerRepository.find({
+      where: {
+        id: id,
+        clinicId,
+      },
+    });
+
+    if (!plan) throw new NotFoundException(NotFoundMessage.PlanNotFound);
+
+    if (dayName) plan.dayName = dayName;
+    if (day_number) plan.day_number = day_number;
+    if (start_time) plan.start_time = start_time;
+    if (finish_time) plan.finish_time = finish_time;
+    if (isTrue(status)) plan.status = true;
+    else plan.status = false;
+
+    await this.plannerRepository.update(
+      { id },
+      {
+        dayName: plan.dayName,
+        day_number: plan.day_number,
+        start_time: plan.start_time,
+        finish_time: plan.finish_time,
+        status: plan.status,
+      }
+    );
+    return {
+      message: PublicMessage.Updated,
+      plan,
+    };
   }
 
   remove(id: number) {
