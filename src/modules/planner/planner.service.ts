@@ -8,7 +8,11 @@ import { CreatePlannerDto } from "./dto/create-planner.dto";
 import { UpdatePlannerDto } from "./dto/update-planner.dto";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
-import { AuthMessage, NotFoundMessage } from "../auth/enums/message.enum";
+import {
+  AuthMessage,
+  NotFoundMessage,
+  PublicMessage,
+} from "../auth/enums/message.enum";
 import { InjectRepository } from "@nestjs/typeorm";
 import { PlannerEntity } from "./entities/planner.entity";
 import { Repository } from "typeorm";
@@ -21,11 +25,24 @@ export class PlannerService {
 
     @Inject(REQUEST) private request: Request
   ) {}
-  create(createPlannerDto: CreatePlannerDto) {
+  async create(createPlannerDto: CreatePlannerDto) {
     // if the logged in user is not a clinic can work on category
     const { clinic } = this?.request;
     if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
-    return "This action adds a new planner";
+
+    const { id } = clinic;
+    const { dayName, day_number, finish_time, start_time, status } =
+      createPlannerDto;
+
+    await this.plannerRepository.insert({
+      clinicId: id,
+      dayName,
+      day_number,
+      finish_time,
+      start_time,
+      status,
+    });
+    return { message: PublicMessage.Created };
   }
 
   async findAll() {
