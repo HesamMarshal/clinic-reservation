@@ -1,12 +1,14 @@
 import { BaseEntity } from "src/common/abstracts/base.entity";
 import { EntityName } from "src/common/enums/entity.enum";
 import { CategoryEntity } from "src/modules/category/entities/category.entity";
+import { PlannerEntity } from "src/modules/planner/entities/planner.entity";
 import { OtpEntity } from "src/modules/user/entities/otp.entity";
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
 } from "typeorm";
 
@@ -50,4 +52,10 @@ export class ClinicEntity extends BaseEntity {
   @OneToOne(() => CategoryEntity, (category) => category.id, { nullable: true })
   @JoinColumn()
   category: CategoryEntity;
+
+  @OneToMany(() => PlannerEntity, (planner) => planner.clinicId, {
+    nullable: true,
+  })
+  @JoinColumn()
+  palns: PlannerEntity[];
 }
