@@ -1,25 +1,29 @@
 import { BaseEntity } from "src/common/abstracts/base.entity";
 import { EntityName } from "src/common/enums/entity.enum";
-import { Column, Entity } from "typeorm";
+import { ClinicEntity } from "src/modules/clinic/entities/clinic.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 
 @Entity(EntityName.Planner)
 export class PlannerEntity extends BaseEntity {
   // Fileds
   @Column()
-  clinicId: string;
+  clinicId: number;
 
   @Column()
   dayName: string;
 
   @Column()
-  day_number: string;
+  day_number: number;
 
   @Column()
-  start_time: string;
+  start_time: number;
 
   @Column()
-  finish_time: string;
+  finish_time: number;
 
   @Column()
   status: boolean;
+
+  @ManyToOne(() => ClinicEntity, (clinic) => clinic.id, { onDelete: "CASCADE" })
+  clinic: ClinicEntity;
 }
