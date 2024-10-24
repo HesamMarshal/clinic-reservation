@@ -11,8 +11,9 @@ import {
 import { PlannerService } from "./planner.service";
 import { CreatePlannerDto } from "./dto/create-planner.dto";
 import { UpdatePlannerDto } from "./dto/update-planner.dto";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../auth/guards/auth.guard";
+import { SwaggerConsumes } from "src/common/swagger-consume.enum";
 
 @Controller("planner")
 @ApiTags("Planner")
@@ -22,6 +23,7 @@ export class PlannerController {
   constructor(private readonly plannerService: PlannerService) {}
 
   @Post()
+  @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
   create(@Body() createPlannerDto: CreatePlannerDto) {
     return this.plannerService.create(createPlannerDto);
   }
