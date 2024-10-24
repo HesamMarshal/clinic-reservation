@@ -32,8 +32,11 @@ export class PlannerService {
     if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
 
     const { id } = clinic;
-    const { dayName, day_number, finish_time, start_time, status } =
+    let { dayName, day_number, finish_time, start_time, status } =
       createPlannerDto;
+
+    if (isTrue(status)) status = true;
+    else status = false;
 
     await this.plannerRepository.insert({
       clinicId: id,
