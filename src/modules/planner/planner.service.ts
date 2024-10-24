@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Inject,
   Injectable,
   NotFoundException,
@@ -107,10 +108,19 @@ export class PlannerService {
     };
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     // if the logged in user is not a clinic can work on category
     const { clinic } = this?.request;
     if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
-    return `This action removes a #${id} planner`;
+    const { id: clinicId } = clinic;
+    const plan = await this.plannerRepository.findOneBy({ id });
+    if (!plan) throw new NotFoundException(NotFoundMessage.PlanNotFound);
+
+    // checks if the plan belongs to the clinic
+    if (plan.clinicId !== clinicId)
+      throw new BadRequestException(PublicMessage.NotAlloweded);
+
+    await this.plannerRepository.delete({ id });
+    return { message: PublicMessage.Deleted };
   }
 }
