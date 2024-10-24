@@ -39,6 +39,7 @@ export class PlannerController {
   }
 
   @Patch(":id")
+  @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
   update(@Param("id") id: string, @Body() updatePlannerDto: UpdatePlannerDto) {
     return this.plannerService.update(+id, updatePlannerDto);
   }
