@@ -51,15 +51,17 @@ export class PlannerService {
     return plans;
   }
 
-  async findOne() {
+  async findMyPlans() {
     // if the logged in user is not a clinic can work on category
     const { clinic } = this?.request;
     if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
 
     const { id } = clinic;
-    const plan = await this.plannerRepository.findOneBy({ id });
-    if (!plan) throw new NotFoundException(NotFoundMessage.PlanNotFound);
-    return plan;
+    const plans = await this.plannerRepository.find({
+      where: { clinicId: id },
+    });
+    if (!plans) throw new NotFoundException(NotFoundMessage.PlanNotFound);
+    return plans;
   }
 
   update(id: number, updatePlannerDto: UpdatePlannerDto) {

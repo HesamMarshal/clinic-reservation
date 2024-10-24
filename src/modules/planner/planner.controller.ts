@@ -34,8 +34,8 @@ export class PlannerController {
   }
 
   @Get("/my")
-  findOne() {
-    return this.plannerService.findOne();
+  findMyPlans() {
+    return this.plannerService.findMyPlans();
   }
 
   @Patch(":id")
