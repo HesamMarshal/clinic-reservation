@@ -1,15 +1,21 @@
-import { Controller, Get, Post, Body, Param } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param, UseGuards } from "@nestjs/common";
 import { TransactionsService } from "./transactions.service";
 import { CreateTransactionDto } from "./dto/create-transaction.dto";
 
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { SwaggerConsumes } from "src/common/swagger-consume.enum";
+import { AuthGuard } from "../auth/guards/auth.guard";
 
+// TODO: add user Auth and gurad
 @Controller("transactions")
 @ApiTags("Transactions")
+@ApiBearerAuth("Authorization")
+@UseGuards(AuthGuard)
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
   @Post()
+  @ApiConsumes(SwaggerConsumes.UrlEncoded, SwaggerConsumes.Json)
   create(@Body() createTransactionDto: CreateTransactionDto) {
     return this.transactionsService.create(createTransactionDto);
   }
@@ -17,6 +23,11 @@ export class TransactionsController {
   @Get()
   findAll() {
     return this.transactionsService.findAll();
+  }
+
+  @Get("/my")
+  findMyTransactions() {
+    return this.transactionsService.findMyTransactions();
   }
 
   @Get(":id")
