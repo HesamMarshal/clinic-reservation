@@ -34,7 +34,6 @@ export class TransactionsService {
     const { user } = this?.request;
     if (!user) throw new UnauthorizedException(AuthMessage.UserLogin);
     const { id: userId } = user;
-
     const { clinicId, amount, date, status } = createTransactionDto;
     await this.clinicService.existClinic(clinicId);
 
