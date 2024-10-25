@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { OtpEntity } from "./otp.entity";
 import { BaseEntity } from "src/common/abstracts/base.entity";
 import { TransactionEntity } from "src/modules/transactions/entities/transaction.entity";
+import { ReservationEntity } from "src/modules/reservation/entities/reservation.entity";
 
 @Entity(EntityName.User)
 export class UserEntity extends BaseEntity {
@@ -29,4 +30,10 @@ export class UserEntity extends BaseEntity {
   })
   @JoinColumn()
   transactions: TransactionEntity[];
+
+  @OneToMany(() => ReservationEntity, (reservation) => reservation.userId, {
+    nullable: true,
+  })
+  @JoinColumn()
+  reservations: ReservationEntity[];
 }
