@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { CreateTransactionDto } from "./dto/create-transaction.dto";
-import { UpdateTransactionDto } from "./dto/update-transaction.dto";
 import { TransactionEntity } from "./entities/transaction.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -16,8 +15,8 @@ import {
   NotFoundMessage,
   PublicMessage,
 } from "../auth/enums/message.enum";
-import { ClinicEntity } from "../clinic/entities/clinic.entity";
 import { ClinicService } from "../clinic/clinic.service";
+import { isTrue } from "src/common/utils/functions.util";
 
 @Injectable()
 export class TransactionsService {
@@ -34,7 +33,9 @@ export class TransactionsService {
     const { user } = this?.request;
     if (!user) throw new UnauthorizedException(AuthMessage.UserLogin);
     const { id: userId } = user;
-    const { clinicId, amount, date, status } = createTransactionDto;
+    let { clinicId, amount, date, status } = createTransactionDto;
+    status = isTrue(status);
+
     await this.clinicService.existClinic(clinicId);
 
     await this.transactionRepository.insert({
@@ -60,7 +61,10 @@ export class TransactionsService {
     const { user } = this?.request;
     if (!user) throw new UnauthorizedException(AuthMessage.UserLogin);
     const { id: userId } = user;
-    return `This action returns a #${id} transaction`;
+    const transaction = await this.transactionRepository.findOneBy({
+      id,
+    });
+    return { transaction };
   }
 
   async findMyTransactions() {
