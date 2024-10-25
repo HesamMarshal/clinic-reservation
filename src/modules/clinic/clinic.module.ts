@@ -23,5 +23,6 @@ import { CategoryModule } from "../category/category.module";
   ],
   controllers: [ClinicController],
   providers: [ClinicService, CategoryService],
+  exports: [ClinicService],
 })
 export class ClinicModule {}
