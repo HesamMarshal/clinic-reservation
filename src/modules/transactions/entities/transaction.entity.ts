@@ -16,7 +16,7 @@ export class TransactionEntity extends BaseEntity {
   @Column()
   status: boolean;
   @Column()
-  date: number;
+  date: Date;
 
   // Relations
   @ManyToOne(() => ClinicEntity, (clinic) => clinic.id)
