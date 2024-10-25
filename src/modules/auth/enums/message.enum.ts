@@ -44,3 +44,10 @@ export enum PublicMessage {
   Deleted = "با موفقیت حذف شد",
   NotAlloweded = "شما مجاز به انجام این عملیات نیستید",
 }
+
+export enum ReservationMessage {
+  NoPlanAtDate = "مطب در این روز مریض نمی پذیرد",
+  OutOfRange = "بازه زمانی انتخاب شده خارج از بازه زمانی فعالیت مطب است",
+  ZeroDuration = "بازه زمانی باید بزرگتر از یک دقیقه باشد",
+  LongDuration = "مدت زمان ویزیت نباید بیشتر از 15 دقیقه باشد",
+}
