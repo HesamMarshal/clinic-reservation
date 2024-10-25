@@ -28,7 +28,7 @@ export class PlannerService {
     @Inject(REQUEST) private request: Request
   ) {}
   async create(createPlannerDto: CreatePlannerDto) {
-    // if the logged in user is not a clinic can work on category
+    // if the logged in user is not a clinic can not work on category
     const { clinic } = this?.request;
     if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
 
@@ -70,7 +70,7 @@ export class PlannerService {
   }
 
   async update(id: number, updatePlannerDto: UpdatePlannerDto) {
-    // if the logged in user is not a clinic can work on category
+    // if the logged in user is not a clinic can not work on category
     const { clinic } = this?.request;
     if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
     const { id: clinicId } = clinic;
@@ -109,7 +109,7 @@ export class PlannerService {
   }
 
   async remove(id: number) {
-    // if the logged in user is not a clinic can work on category
+    // if the logged in user is not a clinic can not work on category
     const { clinic } = this?.request;
     if (!clinic) throw new UnauthorizedException(AuthMessage.ClinicLogin);
     const { id: clinicId } = clinic;
