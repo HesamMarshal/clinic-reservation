@@ -8,8 +8,9 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { TypeOrmConfig } from "./config/typeorm.config";
 import { ClinicModule } from "./modules/clinic/clinic.module";
-import { CategoryModule } from './modules/category/category.module';
-import { PlannerModule } from './modules/planner/planner.module';
+import { CategoryModule } from "./modules/category/category.module";
+import { PlannerModule } from "./modules/planner/planner.module";
+import { TransactionsModule } from "./modules/transactions/transactions.module";
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { PlannerModule } from './modules/planner/planner.module';
     ClinicModule,
     CategoryModule,
     PlannerModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
