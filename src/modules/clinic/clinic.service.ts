@@ -121,4 +121,9 @@ export class ClinicService {
     this.clinicRepository.remove(result);
     return { message: PublicMessage.Deleted };
   }
+  async existClinic(id: number) {
+    const clinic = await this.clinicRepository.findOneBy({ id });
+    if (!clinic) throw new NotFoundException(NotFoundMessage.ClinicNotFount);
+    return clinic;
+  }
 }
