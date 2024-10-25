@@ -11,6 +11,7 @@ import { ClinicModule } from "./modules/clinic/clinic.module";
 import { CategoryModule } from "./modules/category/category.module";
 import { PlannerModule } from "./modules/planner/planner.module";
 import { TransactionsModule } from "./modules/transactions/transactions.module";
+import { ReservationModule } from "./modules/reservation/reservation.module";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TransactionsModule } from "./modules/transactions/transactions.module";
     CategoryModule,
     PlannerModule,
     TransactionsModule,
+    ReservationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
