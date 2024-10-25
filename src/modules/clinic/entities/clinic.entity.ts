@@ -2,6 +2,7 @@ import { BaseEntity } from "src/common/abstracts/base.entity";
 import { EntityName } from "src/common/enums/entity.enum";
 import { CategoryEntity } from "src/modules/category/entities/category.entity";
 import { PlannerEntity } from "src/modules/planner/entities/planner.entity";
+import { TransactionEntity } from "src/modules/transactions/entities/transaction.entity";
 import { OtpEntity } from "src/modules/user/entities/otp.entity";
 import {
   Column,
@@ -58,4 +59,10 @@ export class ClinicEntity extends BaseEntity {
   })
   @JoinColumn()
   palns: PlannerEntity[];
+
+  @OneToMany(() => TransactionEntity, (transaction) => transaction.clinicId, {
+    nullable: true,
+  })
+  @JoinColumn()
+  transactions: TransactionEntity[];
 }

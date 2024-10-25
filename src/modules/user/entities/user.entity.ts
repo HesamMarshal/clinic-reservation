@@ -1,7 +1,8 @@
 import { EntityName } from "src/common/enums/entity.enum";
-import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { OtpEntity } from "./otp.entity";
 import { BaseEntity } from "src/common/abstracts/base.entity";
+import { TransactionEntity } from "src/modules/transactions/entities/transaction.entity";
 
 @Entity(EntityName.User)
 export class UserEntity extends BaseEntity {
@@ -22,4 +23,10 @@ export class UserEntity extends BaseEntity {
   @OneToOne(() => OtpEntity, (otp) => otp.user, { nullable: true })
   @JoinColumn()
   otp: OtpEntity;
+
+  @OneToMany(() => TransactionEntity, (transaction) => transaction.userId, {
+    nullable: true,
+  })
+  @JoinColumn()
+  transactions: TransactionEntity[];
 }
