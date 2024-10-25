@@ -11,6 +11,7 @@ export enum AuthMessage {
   LoginAgain = "مجدد وارد حساب کاربری خود شوید",
   LoginIsRequired = "وارد حساب کاربری خود شوید",
   ClinicLogin = "برای دسترسی به این بخش باید با حساب کاربری کلینیک وارد شوید",
+  UserLogin = "برای دسترسی به این بخش باید به صورت کاربر معمولی وارد شوید",
 }
 export enum UserMessage {
   Updated = "حساب کاربری به روز رسانی شد",
@@ -29,6 +30,7 @@ export enum NotFoundMessage {
   ClinicNotFount = "کلینک پیدا نشد",
   CategoryNotFount = "دسته بندی پیدا نشد",
   PlanNotFound = "برنامه ای پیدا نشد",
+  TransacionNotFound = "تراکنش پیدا نشد",
 }
 export enum ValidationMessage {
   InvalidPhoneForamt = "فرمت شماره موبایل وارد شده قابل قبول نیست",
