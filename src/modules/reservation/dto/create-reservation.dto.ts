@@ -5,8 +5,6 @@ export class CreateReservationDto {
   @ApiProperty()
   clinicId: number;
   @ApiProperty()
-  userId: number;
-  @ApiProperty()
   start_visit_time: number;
   @ApiProperty()
   finish_visit_time: number;
