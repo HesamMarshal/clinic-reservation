@@ -12,7 +12,7 @@ import { ChangeNameDto } from "./dto/user.dto";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get("admin-only")
+  @Get("for-admin")
   findAll() {
     //  this section only must be availbale for admins.
     //  we implemented this just to make it easier for implementation.

@@ -20,7 +20,7 @@ export class TransactionsController {
     return this.transactionsService.create(createTransactionDto);
   }
 
-  @Get()
+  @Get("/for-admin")
   findAll() {
     return this.transactionsService.findAll();
   }

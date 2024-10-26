@@ -41,7 +41,7 @@ export class CategoryController {
     return this.categoryService.create(file, createCategoryDto);
   }
 
-  @Get()
+  @Get("/for-admin")
   findAll() {
     return this.categoryService.findAll();
   }

@@ -28,7 +28,7 @@ export class ReservationController {
     return this.reservationService.create(createReservationDto);
   }
 
-  @Get()
+  @Get("for-admin")
   findAll() {
     return this.reservationService.findAll();
   }

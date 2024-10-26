@@ -28,7 +28,7 @@ export class PlannerController {
     return this.plannerService.create(createPlannerDto);
   }
 
-  @Get()
+  @Get("/for-admin")
   findAll() {
     return this.plannerService.findAll();
   }

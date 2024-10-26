@@ -20,7 +20,7 @@ import { SwaggerConsumes } from "src/common/swagger-consume.enum";
 export class ClinicController {
   constructor(private readonly clinicService: ClinicService) {}
 
-  @Get()
+  @Get("/for-admin")
   findAll() {
     //  this section only must be availbale for admins.
     //  we implemented this just to make it easier for implementation.
@@ -43,12 +43,12 @@ export class ClinicController {
     return this.clinicService.remove();
   }
 
-  @Get("/confirm/:id")
+  @Get("/confirm-reservation/:id")
   confirmReservation(@Param("id") id: string) {
     return this.clinicService.confirmReservation(+id);
   }
 
-  @Get("/reject/:id")
+  @Get("/reject-reservation/:id")
   rejectReservation(@Param("id") id: string) {
     return this.clinicService.rejectReservation(+id);
   }
