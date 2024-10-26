@@ -7,12 +7,17 @@ import { AuthModule } from "../auth/auth.module";
 import { ClinicService } from "../clinic/clinic.service";
 import { ClinicEntity } from "../clinic/entities/clinic.entity";
 import { ClinicModule } from "../clinic/clinic.module";
+import { ReservationEntity } from "../reservation/entities/reservation.entity";
 
 @Module({
   imports: [
     AuthModule,
     ClinicModule,
-    TypeOrmModule.forFeature([TransactionEntity, ClinicEntity]),
+    TypeOrmModule.forFeature([
+      TransactionEntity,
+      ClinicEntity,
+      ReservationEntity,
+    ]),
   ],
   controllers: [TransactionsController],
   providers: [TransactionsService],
