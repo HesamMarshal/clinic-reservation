@@ -34,4 +34,13 @@ export class TransactionsController {
   findOne(@Param("id") id: string) {
     return this.transactionsService.findOne(+id);
   }
+
+  @Get("confirm/:id")
+  confirmTransaction(@Param("id") id: string) {
+    return this.transactionsService.confirmTransaction(+id);
+  }
+  @Get("reject/:id")
+  rejectTransaction(@Param("id") id: string) {
+    return this.transactionsService.rejectTransaction(+id);
+  }
 }
