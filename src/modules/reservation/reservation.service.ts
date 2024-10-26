@@ -43,7 +43,7 @@ export class ReservationService {
     date = new Date(date);
     const dayNumber = date.getDay();
     const weekday = getWeekday(date);
-    console.log(dayNumber, weekday);
+
     const [planner] = await this.plannerRepository.find({
       where: {
         clinicId,
@@ -51,7 +51,7 @@ export class ReservationService {
       },
     });
     if (!planner) throw new NotFoundException(ReservationMessage.NoPlanAtDate);
-    console.log(planner);
+
     this.timeChecker(start_visit_time, finish_visit_time, planner);
 
     let reservation = await this.resrvationRepository.create({
@@ -62,7 +62,6 @@ export class ReservationService {
       date,
     });
     reservation = await this.resrvationRepository.save(reservation);
-    console.log(reservation);
 
     // Do the payments (transaction)
     return {

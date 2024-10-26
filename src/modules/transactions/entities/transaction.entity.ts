@@ -2,9 +2,8 @@ import { BaseEntity } from "src/common/abstracts/base.entity";
 import { EntityName } from "src/common/enums/entity.enum";
 import { ClinicEntity } from "src/modules/clinic/entities/clinic.entity";
 import { UserEntity } from "src/modules/user/entities/user.entity";
-import { Column, Entity, ManyToOne, OneToOne } from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 import { TransacionStatus } from "../types/status.enum";
-import { ReservationEntity } from "src/modules/reservation/entities/reservation.entity";
 
 @Entity(EntityName.Transacion)
 export class TransactionEntity extends BaseEntity {

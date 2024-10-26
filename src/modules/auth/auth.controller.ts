@@ -3,7 +3,7 @@ import { AuthService } from "./auth.service";
 import { ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { SwaggerConsumes } from "src/common/swagger-consume.enum";
 import { AuthDto, CheckOtpDto } from "./dto/auth.dto";
-import { Response, Request } from "express";
+import { Response } from "express";
 
 @Controller("auth")
 @ApiTags("Auth")

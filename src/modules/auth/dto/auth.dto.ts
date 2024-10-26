@@ -6,14 +6,6 @@ export class AuthDto {
   @IsString()
   @Length(11)
   mobile: string;
-
-  // @ApiProperty({ enum: AuthType })
-  // @IsEnum(AuthType)
-  // type: string;
-
-  // @ApiProperty({ enum: UserType })
-  // @IsEnum(UserType)
-  // userType: UserType;
 }
 
 export class CheckOtpDto {
