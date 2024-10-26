@@ -2,8 +2,9 @@ import { BaseEntity } from "src/common/abstracts/base.entity";
 import { EntityName } from "src/common/enums/entity.enum";
 import { ClinicEntity } from "src/modules/clinic/entities/clinic.entity";
 import { UserEntity } from "src/modules/user/entities/user.entity";
-import { Column, Entity, ManyToOne } from "typeorm";
-import { PaymentStatus } from "../types/status.enum";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm";
+import { PaymentStatus, ReservationStatus } from "../types/status.enum";
+import { TransactionEntity } from "src/modules/transactions/entities/transaction.entity";
 
 @Entity(EntityName.Reservaion)
 export class ReservationEntity extends BaseEntity {
@@ -16,8 +17,8 @@ export class ReservationEntity extends BaseEntity {
   start_visit_time: number;
   @Column()
   finish_visit_time: number;
-  @Column()
-  status: boolean;
+  @Column({ default: ReservationStatus.Pending })
+  status: string;
   @Column()
   date: Date;
   @Column({ default: PaymentStatus.Pending })
@@ -29,4 +30,10 @@ export class ReservationEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.id)
   user: UserEntity;
+
+  @OneToOne(() => TransactionEntity, (transaction) => transaction.id, {
+    nullable: true,
+  })
+  @JoinColumn()
+  paymentId: TransactionEntity;
 }
