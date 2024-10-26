@@ -33,7 +33,6 @@ export class UserService {
   async findOne() {
     //  get user from token
     const { user } = this?.request;
-    console.log(user);
     if (!user) throw new UnauthorizedException(AuthMessage.LoginAgain);
     const { id } = user;
     const result = await this.userRepository.findOneBy({ id });

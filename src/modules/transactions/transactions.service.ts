@@ -84,7 +84,6 @@ export class TransactionsService {
       { id },
       { status: TransacionStatus.Confirmed }
     );
-    console.log(transaction);
 
     // Change status in reservation to confirmed
     await this.reservationRepository.update(
