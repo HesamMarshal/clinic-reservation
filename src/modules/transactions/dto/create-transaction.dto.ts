@@ -10,10 +10,14 @@ export class CreateTransactionDto {
   //   @IsNumber()
   amount: number;
 
-  @ApiProperty()
-  status: boolean;
+  // @ApiProperty()
+  // status: boolean;
 
   @ApiProperty()
   //   @IsDate()
   date: Date;
+
+  @ApiProperty()
+  //   @IsDate()
+  reservationId: number;
 }
