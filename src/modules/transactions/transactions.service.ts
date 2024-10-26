@@ -16,7 +16,6 @@ import {
   PublicMessage,
 } from "../auth/enums/message.enum";
 import { ClinicService } from "../clinic/clinic.service";
-import { isTrue } from "src/common/utils/functions.util";
 import { TransacionStatus } from "./types/status.enum";
 import { ReservationEntity } from "../reservation/entities/reservation.entity";
 import { PaymentStatus } from "../reservation/types/status.enum";
@@ -84,7 +83,6 @@ export class TransactionsService {
       { id },
       { status: TransacionStatus.Confirmed }
     );
-    console.log(transaction);
 
     // Change status in reservation to confirmed
     await this.reservationRepository.update(

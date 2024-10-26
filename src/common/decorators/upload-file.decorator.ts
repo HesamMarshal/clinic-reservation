@@ -1,4 +1,4 @@
-import { ParseFilePipe, UploadedFiles, applyDecorators } from "@nestjs/common";
+import { ParseFilePipe, UploadedFiles } from "@nestjs/common";
 
 export function UploadedOptionalFiles() {
   return UploadedFiles(

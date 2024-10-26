@@ -1,7 +1,7 @@
 import { BaseEntity } from "src/common/abstracts/base.entity";
 import { EntityName } from "src/common/enums/entity.enum";
 import { ClinicEntity } from "src/modules/clinic/entities/clinic.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 
 @Entity(EntityName.Planner)
 export class PlannerEntity extends BaseEntity {
