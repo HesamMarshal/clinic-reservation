@@ -17,12 +17,16 @@ import {
 import { Request } from "express";
 import { CategoryService } from "../category/category.service";
 import { EntityName } from "src/common/enums/entity.enum";
+import { ReservationEntity } from "../reservation/entities/reservation.entity";
+import { ReservationStatus } from "../reservation/types/status.enum";
 
 @Injectable()
 export class ClinicService {
   constructor(
     @InjectRepository(ClinicEntity)
     private clinicRepository: Repository<ClinicEntity>,
+    @InjectRepository(ReservationEntity)
+    private reservationRepository: Repository<ReservationEntity>,
     private readonly categoryService: CategoryService,
 
     @Inject(REQUEST) private request: Request
@@ -125,5 +129,26 @@ export class ClinicService {
     const clinic = await this.clinicRepository.findOneBy({ id });
     if (!clinic) throw new NotFoundException(NotFoundMessage.ClinicNotFount);
     return clinic;
+  }
+
+  async confirmReservation(id: number) {
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.LoginAgain);
+
+    await this.reservationRepository.update(
+      { id },
+      { status: ReservationStatus.Confirmed }
+    );
+    return { message: PublicMessage.Updated };
+  }
+  async rejectReservation(id: number) {
+    const { clinic } = this?.request;
+    if (!clinic) throw new UnauthorizedException(AuthMessage.LoginAgain);
+
+    await this.reservationRepository.update(
+      { id },
+      { status: ReservationStatus.Confirmed }
+    );
+    return { message: PublicMessage.Updated };
   }
 }

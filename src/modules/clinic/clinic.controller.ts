@@ -5,6 +5,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  Param,
 } from "@nestjs/common";
 import { ClinicService } from "./clinic.service";
 import { UpdateClinicDto } from "./dto/update-clinic.dto";
@@ -40,5 +41,15 @@ export class ClinicController {
   @Delete()
   remove() {
     return this.clinicService.remove();
+  }
+
+  @Get("/confirm/:id")
+  confirmReservation(@Param("id") id: string) {
+    return this.clinicService.confirmReservation(+id);
+  }
+
+  @Get("/reject/:id")
+  rejectReservation(@Param("id") id: string) {
+    return this.clinicService.rejectReservation(+id);
   }
 }
